@@ -1,0 +1,38 @@
+
+services:
+  sovara-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sovara-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:16
+    container_name: sovara-postgres
+    environment:
+      POSTGRES_DB: sovara
+      POSTGRES_USER: sovara_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: sovara-redis
+    ports:
+      - "127.0.0.1:6379:6379"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
