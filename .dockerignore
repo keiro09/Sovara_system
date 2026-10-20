@@ -1,0 +1,5 @@
+sovara_env/
+__pycache__/
+*.pyc
+.env
+.git/
